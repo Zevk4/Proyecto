@@ -1,0 +1,171 @@
+/*=====================================
+  4. Pie de página (Footer)
+  =====================================*/
+
+  
+footer.bg-dark {
+    background-color: #1a1a1a !important;
+}
+
+footer h3 {
+    color: var(--color-principal);
+}
+
+/* POR ESTO: */
+#footerMap {
+    width: 100%;
+    height: 300px; /* Le da altura al mapa */
+    border-radius: 8px;
+    background-color: #333; /* Color de fondo mientras carga */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1; /* Asegura que el mapa esté visible */
+}
+
+/* Estilos para los íconos de redes sociales */
+.social-links a {
+    /* font-size: 50px; (Eliminado, ya no es necesario) */
+    margin: 0 10px;
+    transition: opacity 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* NUEVA REGLA: Dar tamaño a los SVGs */
+.social-links a svg {
+    width: 40px;  /* Ajusta el tamaño aquí */
+    height: 40px; /* Ajusta el tamaño aquí */
+}
+
+.social-links a:hover {
+    opacity: 0.7;
+}
+
+/* Colores de las redes sociales */
+/* (Los SVGs con 'fill="currentColor"' heredarán estos colores) */
+.social-links a:nth-of-type(1) { color: #3b5998; }
+.social-links a:nth-of-type(2) { color: #E1306C; }
+.social-links a:nth-of-type(3) { color: #0077b5; }
+.social-links a:nth-of-type(4) { color: #ffffff; } /* X/Twitter blanco */
+.social-links a:nth-of-type(5) { color: #FF0000; }
+
+/* Separador de Copyright */
+.footer-divider {
+    border-top: 1px solid var(--color-secundario);
+    opacity: 1; 
+    margin-top: 2rem;
+}
+
+/*
+  Este 'wrapper' reemplaza al <Container> de Bootstrap
+  y le aplica el mismo padding que tus otros componentes.
+*/
+.footer-content-wrapper {
+  /* Aplicamos el padding horizontal de 55px */
+  padding-left: 55px;
+  padding-right: 55px;
+
+  /* Mantenemos el centrado y ancho máximo
+     (tomado de tu style.css original) */
+  width: 100%;
+  max-width: 72%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =======================================
+   RESPONSIVE DESIGN PARA FOOTER
+======================================= */
+
+/* Tablets y móviles grandes (768px y menos) */
+@media (max-width: 768px) {
+  .footer-content-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* Mapa más pequeño */
+  #footerMap {
+    height: 250px !important;
+  }
+
+  /* Íconos sociales más pequeños */
+  .social-links a svg {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  /* Texto más pequeño */
+  footer h3 {
+    font-size: 1.1rem;
+  }
+
+  footer p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles pequeños (576px y menos) */
+@media (max-width: 576px) {
+  .footer-content-wrapper {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Mapa aún más pequeño */
+  #footerMap {
+    height: 200px !important;
+  }
+
+  /* Íconos sociales más pequeños */
+  .social-links a svg {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  /* Texto más pequeño */
+  footer h3 {
+    font-size: 1rem;
+  }
+
+  footer p {
+    font-size: 0.85rem;
+  }
+
+  /* Ajustes para el layout de columnas */
+  .row > .col-md-6 {
+    margin-bottom: 30px;
+  }
+}
+
+/* Pantallas muy pequeñas (480px y menos) */
+@media (max-width: 480px) {
+  .footer-content-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  /* Mapa muy pequeño */
+  #footerMap {
+    height: 180px !important;
+  }
+
+  /* Íconos sociales muy pequeños */
+  .social-links a svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Texto muy pequeño */
+  footer h3 {
+    font-size: 0.95rem;
+  }
+
+  footer p {
+    font-size: 0.8rem;
+  }
+
+  /* Ajustes para el layout de columnas */
+  .row > .col-md-6 {
+    margin-bottom: 20px;
+  }
+}

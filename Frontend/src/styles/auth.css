@@ -1,0 +1,351 @@
+/* =======================================
+CSS LOGIN CON PALETA DE COLORES UNIFICADA
+======================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+/* --- Contenedor Principal --- */
+.auth-container {
+    position: absolute; /* Cambio clave */
+    width: 100%;
+    max-width: 400px;
+    min-height: 480px;
+    background-color: var(--color-fondo-claro);
+    border: 1px solid var(--color-fondo-oscuro);
+    border-radius: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Para asegurar que flote SOBRE el fondo */
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    min-height: 480px;
+}
+
+/* --- Tipografía --- */
+h1 {
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+span {
+    font-size: 12px;
+    color: var(--color-texto);
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--color-texto);
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 5px 0;
+}
+
+.mobile-toggle-text a {
+    color: var(--color-secundario);
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+form a.forgot {
+    display: block;
+    color: var(--color-texto);
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+    text-align: center;
+}
+
+/* --- Formularios --- */
+.form-container {
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-container form {
+    background-color: var(--color-fondo-claro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    gap: 15px;
+    padding: 20px;
+}
+
+/* Title and subtitle positioning */
+.auth-container h1 {
+    margin: 10px 0 5px 0;
+    order: -5;
+}
+
+.auth-container span {
+    margin: 0 0 10px 0;
+    order: -4;
+}
+
+/* Input positioning */
+.auth-container input {
+    background-color: var(--color-fondo-oscuro);
+    border: 1px solid #444;
+    color: var(--color-texto);
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    order: -3 !important;
+}
+
+.auth-container input::placeholder {
+    color: #888;
+}
+
+/* Error message positioning */
+.form-message {
+    color: var(--color-error);
+    font-size: 14px;
+    text-align: center;
+    height: 20px;
+    margin-bottom: 10px;
+    order: -2;
+    margin: 10px 0;
+}
+
+.form-message.success {
+    color: var(--color-secundario);
+}
+
+/* --- Botones --- */
+.auth-container button {
+    background-color: var(--color-secundario);
+    color: var(--color-fondo);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 45px;
+    border: none;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    order: 5;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+    .auth-container form {
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .auth-container h1 {
+        font-size: 24px;
+        margin: 8px 0 3px 0;
+    }
+
+    .auth-container span {
+        font-size: 11px;
+        margin: 0 0 8px 0;
+    }
+
+    .auth-container input {
+        margin: 0;
+    }
+
+    .auth-container button {
+        margin-top: 8px;
+    }
+}
+
+.auth-container button:hover {
+    background-color: #49f072;
+    box-shadow: 0 0 10px var(--color-principal);
+}
+
+/* --- Accesibilidad --- */
+.auth-container input:focus-visible,
+.auth-container button:focus-visible,
+.mobile-toggle-text a:focus-visible {
+    outline: 2px solid var(--color-principal);
+    outline-offset: 2px;
+}
+
+/* --- Paneles --- */
+.register {
+    display: none;
+}
+
+.auth-container.active .login {
+    display: none;
+}
+
+.auth-container.active .register {
+    display: block;
+}
+
+.alternar-container {
+    display: none;
+}
+
+/* --- Estilos para Escritorio --- */
+@media (min-width: 768px) {
+    .auth-container {
+        max-width: 768px;
+    }
+
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+        padding: 0 40px;
+    }
+
+    .register,
+    .login {
+        display: flex;
+        left: 0;
+        width: 50%;
+    }
+
+    .register {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    .login {
+        z-index: 2;
+    }
+
+    .auth-container.active .register {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: move 0.6s;
+    }
+
+    .auth-container.active .login {
+        transform: translateX(100%);
+    }
+
+    .mobile-toggle-text {
+        display: none;
+    }
+
+    .alternar-container {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: all 0.6s ease-in-out;
+        border-radius: 150px 0 0 100px;
+        z-index: 100;
+    }
+
+    .auth-container.active .alternar-container {
+        transform: translateX(-100%);
+        border-radius: 0 150px 100px 0;
+    }
+
+    .alternar {
+        background: var(--color-fondo);
+        border: 1px solid var(--color-fondo-oscuro);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #ffffff;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .auth-container.active .alternar {
+        transform: translateX(50%);
+    }
+
+    .alternar-panel {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 30px;
+        text-align: center;
+        top: 0;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .alternar-izquierda {
+        transform: translateX(-20%);
+    }
+
+    .auth-container.active .alternar-izquierda {
+        transform: translateX(0);
+    }
+
+    .alternar-derecha {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    .auth-container.active .alternar-derecha {
+        transform: translateX(20%);
+    }
+
+    button.hidden {
+        background-color: transparent;
+        border: 1px solid var(--color-principal);
+        color: var(--color-principal);
+        cursor: pointer;
+    }
+
+    button.hidden:hover {
+        background-color: var(--color-principal);
+        color: #ffffff;
+    }
+
+    @keyframes move {
+        0%,
+        49.99% {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        50%,
+        100% {
+            opacity: 1;
+            z-index: 5;
+        }
+    }
+}
