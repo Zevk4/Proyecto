@@ -1,6 +1,6 @@
 package com.microservices.microservicios.controller;
 
-import com.microservices.microservicios.config.JwtTokenProvider; // Import JwtTokenProvider
+import com.microservices.microservicios.config.JwtTokenProvider;
 import com.microservices.microservicios.dto.CartItemDTO;
 import com.microservices.microservicios.dto.requests.CartItemRequest;
 import com.microservices.microservicios.service.CartService;
@@ -37,8 +37,8 @@ public class CartController {
 
     @PutMapping("/{itemId}")
     public ResponseEntity<CartItemDTO> updateQuantity(@PathVariable Long itemId,
-                                                     @Valid @RequestBody CartItemRequest request,
-                                                     @RequestHeader("Authorization") String token) {
+                                                      @Valid @RequestBody CartItemRequest request,
+                                                      @RequestHeader("Authorization") String token) {
         String email = getEmailFromToken(token);
         return ResponseEntity.ok(cartService.updateQuantity(email, itemId, request.getQuantity()));
     }
@@ -51,16 +51,21 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/clear")
+    // --- CORRECCIÓN APLICADA: POST para /clear ---
+    // Ahora coincide con la llamada de tu Frontend
+    @PostMapping("/clear")
     public ResponseEntity<Void> clearCart(@RequestHeader("Authorization") String token) {
         String email = getEmailFromToken(token);
         cartService.clearCart(email);
         return ResponseEntity.noContent().build();
     }
 
-    // Helper method to extract email from token
+    // Método auxiliar para extraer email
     private String getEmailFromToken(String token) {
-        String jwt = token.substring(7); 
-        return jwtTokenProvider.getEmailFromToken(jwt);
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwt = token.substring(7); 
+            return jwtTokenProvider.getEmailFromToken(jwt);
+        }
+        throw new RuntimeException("Token inválido o ausente");
     }
 }

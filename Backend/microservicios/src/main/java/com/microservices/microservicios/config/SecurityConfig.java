@@ -26,7 +26,6 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -40,63 +39,54 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ⬅️ AGREGAR CORS
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        // 1. Rutas de Autenticación (Login/Register)
-                        .requestMatchers("/api/auth/**").permitAll()
-                        
-                        // 2. Permitir crear usuario sin autenticación
-                        .requestMatchers("/api/users/create").permitAll()
-                        
-                        // 3. Rutas Públicas (Ver productos y categorías)
-                        .requestMatchers("/api/products/**", "/api/categories/**").permitAll()
-                        
-                        // 4. Rutas de usuario autenticado (perfil, carrito)
-                        .requestMatchers("/api/users/**", "/api/cart/**").authenticated()
-                        
-                        // 5. Rutas de Admin
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        
-                        // 6. Permitir acceso a /error
-                        .requestMatchers("/error").permitAll()
-                        
-                        // 7. Cualquier otra cosa requiere autenticación
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                // 1. Rutas de Autenticación (Login/Register)
+                .requestMatchers("/api/auth/**").permitAll()
+                
+                // 2. Permitir crear usuario sin autenticación
+                .requestMatchers("/api/users/create").permitAll()
+                
+                // 3. Rutas Públicas (Ver productos y categorías)
+                .requestMatchers("/api/products/**", "/api/categories/**").permitAll()
+                
+                // 4. Rutas Privadas: Órdenes (SOLUCIÓN AL ERROR 403 EN CHECKOUT)
+                .requestMatchers("/api/orders/**").authenticated() // ⬅️ ¡ESTA LÍNEA FALTABA!
+                
+                // 5. Rutas de usuario autenticado (perfil, carrito)
+                .requestMatchers("/api/users/**", "/api/cart/**").authenticated()
+                
+                // 6. Rutas de Admin
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                
+                // 7. Permitir acceso a /error para ver logs claros
+                .requestMatchers("/error").permitAll()
+                
+                // 8. Cualquier otra cosa requiere autenticación
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ⬇️ AGREGAR CONFIGURACIÓN DE CORS
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Permitir tu frontend (ajusta el puerto si es necesario)
+        // Permitir orígenes del frontend
         configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",  // Create React App
-            "http://localhost:5173",  // Vite
-            "http://localhost:4200"   // Angular (por si acaso)
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:4200"
         ));
         
-        // Métodos HTTP permitidos
-        configuration.setAllowedMethods(Arrays.asList(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-        
-        // Headers permitidos
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        
-        // Permitir credenciales (cookies, authorization headers)
         configuration.setAllowCredentials(true);
-        
-        // Exponer el header Authorization para que el frontend pueda leerlo
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        
-        // Tiempo de cache para preflight requests
         configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

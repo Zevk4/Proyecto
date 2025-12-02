@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { Product, CartItem } from 'types';
 import { useAuth } from 'hooks/useAuth';
 import { storageService } from 'services/storageService';
-import { apiService } from 'services/apiService'; // CAMBIO: Importar servicio
+import { apiService } from 'services/apiService';
+
 
 // 1. Definir la forma del Contexto
 interface CartContextType {
@@ -27,7 +28,7 @@ interface CartProviderProps {
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]); // Initialize as empty, will load from API or localStorage
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const { user } = useAuth();
 
@@ -50,29 +51,35 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     // Effect to load cart on component mount or user change
     useEffect(() => {
         fetchCart();
-    }, [user]); // Re-fetch cart when user logs in or out
+    }, [user]);
 
     // --- Funciones del Carrito ---
 
     const addToCart = async (product: Product) => {
         try {
             if (user) {
-                const response = await apiService.post('/cart/add', { productId: product.codigo, quantity: 1 });
-                setCartItems(response.data as CartItem[]);
+                // --- CORRECCIÓN APLICADA AQUÍ ---
+                await apiService.post('/cart/add', { 
+                    productCodigo: product.codigo, // <--- Clave correcta
+                    quantity: 1 
+                });
+                await fetchCart();
             } else {
                 setCartItems(prevItems => {
                     const existingItem = prevItems.find(item => item.product.codigo === product.codigo);
+                    let newItems;
                     if (existingItem) {
-                        return prevItems.map(item =>
+                        newItems = prevItems.map(item =>
                             item.product.codigo === product.codigo
                                 ? { ...item, quantity: item.quantity + 1 }
                                 : item
                         );
                     } else {
-                        return [...prevItems, { product: product, quantity: 1 }];
+                        newItems = [...prevItems, { product: product, quantity: 1 }];
                     }
+                    storageService.local.set('cart', newItems); // Guardamos newItems, no cartItems (estado anterior)
+                    return newItems;
                 });
-                storageService.local.set('cart', cartItems); // Update localStorage for guest
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -82,13 +89,17 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const removeFromCart = async (codigo: string) => {
         try {
             if (user) {
-                const response = await apiService.post('/cart/remove', { productId: codigo });
-                setCartItems(response.data as CartItem[]);
+                // --- CORRECCIÓN APLICADA AQUÍ ---
+                await apiService.post('/cart/remove', { 
+                    productCodigo: codigo // <--- Clave correcta
+                });
+                await fetchCart();
             } else {
                 setCartItems(prevItems => {
-                    return prevItems.filter(item => item.product.codigo !== codigo);
+                    const newItems = prevItems.filter(item => item.product.codigo !== codigo);
+                    storageService.local.set('cart', newItems);
+                    return newItems;
                 });
-                storageService.local.set('cart', cartItems); // Update localStorage for guest
             }
         } catch (error) {
             console.error('Error removing from cart:', error);
@@ -102,7 +113,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
                 setCartItems([]);
             } else {
                 setCartItems([]);
-                storageService.local.remove('cart'); // Clear localStorage for guest
+                storageService.local.remove('cart');
             }
         } catch (error) {
             console.error('Error clearing cart:', error);
@@ -128,7 +139,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const openCart = () => setIsCartOpen(true);
     const closeCart = () => setIsCartOpen(false);
 
-    // 6. Valor que se expone
     const value = {
         cartItems,
         addToCart,
@@ -149,7 +159,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     );
 };
 
-// 7. Hook personalizado
 export const useCart = () => {
     const context = useContext(CartContext);
     if (context === undefined) {

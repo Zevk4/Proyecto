@@ -1,9 +1,10 @@
 import React from 'react';
 import { useCart } from 'context/CartContext';
 import { useAuth } from 'hooks/useAuth';
+import { apiService } from 'services/apiService';
 import './CartDrawer.css';
 
-// 🧮 Helper para formatear el precio en pesos chilenos
+//  Helper para formatear el precio en pesos chilenos
 const formatPrice = (price: number) =>
   new Intl.NumberFormat('es-CL', {
     style: 'currency',
@@ -11,7 +12,7 @@ const formatPrice = (price: number) =>
   }).format(price);
 
 const CartDrawer: React.FC = () => {
-  // 📦 Hook del carrito
+  // Hook del carrito
   const {
     isCartOpen,
     closeCart,
@@ -22,14 +23,37 @@ const CartDrawer: React.FC = () => {
     clearCart,
   } = useCart();
 
-  // 👤 Hook de autenticación
+  //  Hook de autenticación
   const { user } = useAuth();
 
-  // 🛒 Acción al finalizar compra
-  const handleCheckout = () => {
-    alert('¡Gracias por tu compra!');
-    clearCart();
-    closeCart();
+  // Acción al finalizar compra
+  const handleCheckout = async () => {
+    // Validación de seguridad por si acaso
+    if (!user) {
+      alert("Debes iniciar sesión para finalizar la compra.");
+      return;
+    }
+
+    try {
+      // 1. Llamamos al Backend para crear la orden
+      // (Esto guardará la compra Y vaciará el carrito en la base de datos)
+      await apiService.post('/orders/create');
+
+      // 2. Limpiamos el estado visual del frontend
+      // (Aunque el backend ya lo vació, esto actualiza la pantalla inmediatamente)
+      clearCart();
+
+      // 3. Feedback al usuario
+      alert('¡Gracias por tu compra! Tu orden ha sido procesada.');
+      closeCart();
+
+      // Opcional: Redirigir al perfil para ver historial
+      // window.location.href = '/profile'; 
+
+    } catch (error) {
+      console.error("Error al procesar la compra:", error);
+      alert("Hubo un error al procesar tu compra. Inténtalo de nuevo.");
+    }
   };
 
   return (
@@ -39,7 +63,7 @@ const CartDrawer: React.FC = () => {
       role="dialog"
       aria-modal="true"
     >
-      {/* 🧭 Encabezado */}
+      {/*Encabezado */}
       <div className="drawer-header">
         <h3 id="cartTitle">Tu carrito</h3>
         <button
@@ -52,7 +76,7 @@ const CartDrawer: React.FC = () => {
         </button>
       </div>
 
-      {/* 🧾 Cuerpo del carrito */}
+      {/* Cuerpo del carrito */}
       <div className="drawer-body">
         {cartItems.length === 0 ? (
           <p className="cart-empty-message">Tu carrito está vacío.</p>
@@ -80,7 +104,7 @@ const CartDrawer: React.FC = () => {
         )}
       </div>
 
-      {/* 🧮 Totales y descuentos */}
+      {/* Totales y descuentos */}
       {cartItems.length > 0 && (
         <div className="drawer-footer">
           {/* Total bruto */}

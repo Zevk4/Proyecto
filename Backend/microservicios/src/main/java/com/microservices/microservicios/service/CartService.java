@@ -91,10 +91,19 @@ public class CartService {
     }  
       
     public void clearCart(String email) {  
-        User user = userRepository.findByEmail(email)  
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));  
-              
-        cartItemRepository.deleteByUser(user);  
+        // 1. Buscamos el usuario
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            
+        // 2. RECUPERAMOS la lista de productos de ese usuario
+        // (Asegúrate de que 'cartItemRepository' tenga el método findByUser, que vi que sí lo tiene)
+        List<CartItem> items = cartItemRepository.findByUser(user);
+        
+        // 3. BORRADO SEGURO
+        // Usamos deleteAll() pasando la lista. Esto borra uno por uno y es a prueba de fallos.
+        if (!items.isEmpty()) {
+            cartItemRepository.deleteAll(items);
+        }
     }  
       
     private CartItemDTO convertToDTO(CartItem cartItem) {  
