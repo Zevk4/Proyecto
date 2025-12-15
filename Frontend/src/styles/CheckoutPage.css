@@ -1,0 +1,99 @@
+/* =======================================
+   ESTILOS PARA LA PÁGINA DE CHECKOUT
+======================================= */
+
+.checkout-container {
+    background-color: var(--color-fondo);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    animation: fadeIn 0.5s ease-in-out;
+    max-width: 1300px;
+}
+
+.checkout-form-container,
+.checkout-summary-container {
+    background-color: var(--color-fondo-claro);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+}
+
+.checkout-form-container .form-control{
+    background-color: #222 !important;
+    border: var(--bs-border-width) solid #245587;
+    color: #ffffff;
+}
+
+
+
+.checkout-form-container h4,
+.checkout-summary-container h4 {
+    color: var(--color-principal);
+    border-bottom: 2px solid var(--color-secundario);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.checkout-form .form-label {
+    color: aliceblue !important;
+    font-weight: 500;
+}
+
+.checkout-form .form-control {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.checkout-form .form-control:focus {
+    background-color: #333;
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 0.25rem rgba(30, 144, 255, 0.25);
+    color: #fff;
+}
+
+.checkout-form .form-control.is-invalid {
+    border-color: var(--color-error);
+}
+
+.checkout-summary-container .list-group-item {
+    background-color: transparent;
+    border-color: #444;
+    color: var(--color-texto);
+}
+
+.checkout-summary-container .list-group-item h6 {
+    color: var(--color-texto);
+}
+
+.checkout-summary-container .text-muted {
+    color: rgb(0 127 255 / 75%) !important;
+}
+
+.checkout-summary-container .summary-item strong {
+    color: rgb(0 127 255 / 75%);
+}
+
+.checkout-summary-container hr {
+    border-top: 1px solid #444;
+}
+
+.checkout-summary-container .total-section h4 {
+    color: var(--color-principal);
+}
+
+.pay-button {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+    color: var(--color-fondo);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: var(--transition-speed);
+}
+
+.pay-button:hover {
+    background-color: #2aff00;
+    border-color: #2aff00;
+    transform: scale(1.02);
+}

@@ -36,7 +36,7 @@ export const useForm = (initialValues: FormValues = {}): UseFormReturn => {
     return '';
   }, []);
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
     
     // Actualizar valores

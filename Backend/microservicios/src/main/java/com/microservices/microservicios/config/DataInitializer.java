@@ -21,8 +21,8 @@ public class DataInitializer {
                 User admin = new User();
                 admin.setNombre("Admin");
                 admin.setEmail(adminEmail);
-                admin.setPassword(passwordEncoder.encode("12345678")); // Tu contraseña aquí
-                admin.setRole(UserRole.ADMIN); // Asegúrate de que coincida con tu Enum o String de roles
+                admin.setPassword(passwordEncoder.encode("12345678")); 
+                admin.setRole(UserRole.ADMIN); 
 
                 userRepository.save(admin);
                 System.out.println(" Usuario ADMIN creado automáticamente: " + adminEmail);

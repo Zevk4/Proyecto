@@ -104,11 +104,39 @@ export interface FormErrors {
 export interface UseFormReturn {
   values: FormValues;
   errors: FormErrors;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   validate: () => boolean;
   reset: () => void;
   setErrors: Dispatch<SetStateAction<FormErrors>>;
   setFieldError: (fieldName: string, errorMessage: string) => void;
+}
+
+// ============================================
+// TIPOS DE PEDIDOS (ORDERS)
+// ============================================
+
+export interface OrderItem {
+  productCodigo: string;
+  productName: string;
+  productImagen: string;
+  quantity: number;
+  price: number;
+}
+
+export interface Order {
+  id: number;
+  createdAt: string; // Es un string en formato ISO 8601
+  subtotal: number;
+  discount: number;
+  total: number;
+  customerName: string;
+  customerLastName: string;
+  shippingAddress: string;
+  shippingApartment: string;
+  shippingRegion: string;
+  shippingCommune: string;
+  shippingNotes: string;
+  items: OrderItem[];
 }
 
 // ============================================

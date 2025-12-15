@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/products/**", "/api/categories/**").permitAll()
                 
                 // 4. Rutas Privadas: Órdenes (SOLUCIÓN AL ERROR 403 EN CHECKOUT)
-                .requestMatchers("/api/orders/**").authenticated() // ⬅️ ¡ESTA LÍNEA FALTABA!
+                .requestMatchers("/api/orders/**").authenticated() 
                 
                 // 5. Rutas de usuario autenticado (perfil, carrito)
                 .requestMatchers("/api/users/**", "/api/cart/**").authenticated()

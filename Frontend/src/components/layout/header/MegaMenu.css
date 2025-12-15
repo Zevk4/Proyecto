@@ -52,7 +52,7 @@
 .menu-column .category-title {
   color: var(--color-principal); font-family: 'Orbitron', sans-serif;
   border-bottom: 2px solid var(--color-principal);
-  padding-bottom: 5px; margin: 0; text-decoration: none;
+  padding-bottom: 2px; margin: 0; text-decoration: none;
 }
 .menu-column .category-title:hover { color: #33a0ff; }
 .menu-column ul {

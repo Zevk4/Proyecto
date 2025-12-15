@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
       
     List<Product> findByNombreContainingIgnoreCase(String nombre);  
       
-    long countBySubcategoriaStartingWith(String subcategoria); // Added comment to force recompile
+    long countBySubcategoriaStartingWith(String subcategoria); 
 
     @Query("SELECT p.codigo FROM Product p WHERE p.subcategoria = ?1 ORDER BY p.codigo DESC")  
     List<String> findLastCodigoBySubcategoria(String subcategoria);  

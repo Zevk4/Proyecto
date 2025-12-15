@@ -3,6 +3,7 @@ import { useCart } from 'context/CartContext';
 import { useAuth } from 'hooks/useAuth';
 import { apiService } from 'services/apiService';
 import './CartDrawer.css';
+import { useNavigate } from 'react-router-dom';
 
 //  Helper para formatear el precio en pesos chilenos
 const formatPrice = (price: number) =>
@@ -12,6 +13,7 @@ const formatPrice = (price: number) =>
   }).format(price);
 
 const CartDrawer: React.FC = () => {
+  const navigate = useNavigate();
   // Hook del carrito
   const {
     isCartOpen,
@@ -27,33 +29,18 @@ const CartDrawer: React.FC = () => {
   const { user } = useAuth();
 
   // Acción al finalizar compra
-  const handleCheckout = async () => {
-    // Validación de seguridad por si acaso
+  const handleCheckout = () => {
+    // Validación de seguridad
     if (!user) {
       alert("Debes iniciar sesión para finalizar la compra.");
+      closeCart(); // Cierra el carrito para que pueda ir a login
+      navigate('/login');
       return;
     }
 
-    try {
-      // 1. Llamamos al Backend para crear la orden
-      // (Esto guardará la compra Y vaciará el carrito en la base de datos)
-      await apiService.post('/orders/create');
-
-      // 2. Limpiamos el estado visual del frontend
-      // (Aunque el backend ya lo vació, esto actualiza la pantalla inmediatamente)
-      clearCart();
-
-      // 3. Feedback al usuario
-      alert('¡Gracias por tu compra! Tu orden ha sido procesada.');
-      closeCart();
-
-      // Opcional: Redirigir al perfil para ver historial
-      // window.location.href = '/profile'; 
-
-    } catch (error) {
-      console.error("Error al procesar la compra:", error);
-      alert("Hubo un error al procesar tu compra. Inténtalo de nuevo.");
-    }
+    // Si el usuario está logueado, lo llevamos a la página de checkout
+    closeCart(); // Cierra el carrito
+    navigate('/checkout'); // Navega a la página de checkout
   };
 
   return (

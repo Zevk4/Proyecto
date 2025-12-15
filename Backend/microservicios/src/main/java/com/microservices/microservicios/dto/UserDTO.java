@@ -1,6 +1,6 @@
 package com.microservices.microservicios.dto;
 
-import com.microservices.microservicios.model.User; // Import User entity
+import com.microservices.microservicios.model.User; 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +28,6 @@ public class UserDTO {
         this.id = user.getId();
         this.nombre = user.getNombre();
         this.email = user.getEmail();
-        this.role = user.getRole().name(); // Convert UserRole enum to String
+        this.role = user.getRole().name();
     }
 }

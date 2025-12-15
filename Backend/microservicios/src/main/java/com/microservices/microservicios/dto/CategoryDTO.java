@@ -13,7 +13,7 @@ import java.util.List;
 @Schema(description = "DTO de categoría para respuestas API.")
 public class CategoryDTO {
 
-    // --- AGREGADO: El campo ID ---
+    
     @Schema(description = "Identificador único de la categoría.", example = "1")
     private Long id; 
 

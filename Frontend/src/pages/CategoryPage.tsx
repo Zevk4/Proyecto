@@ -126,7 +126,7 @@ const CategoryPage: React.FC = () => {
               ))}
             </Row>
           ) : (
-            <p className="text-muted text-center">
+            <p className="text text-white text-center">
               No se encontraron productos para esta categoría con los filtros aplicados.
             </p>
           )}

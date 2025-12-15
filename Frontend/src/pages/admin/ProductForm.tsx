@@ -20,11 +20,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, productToEdit }
   const [message, setMessage] = useState('');
 
   const [subcategoriasDisponibles, setSubcategoriasDisponibles] = useState<string[]>([]);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [newSubcategoryName, setNewSubcategoryName] = useState('');
 
   const { products } = useProducts();
-  const { categories: allCategories, addCategory, addSubcategory } = useCategories();
+  const { categories: allCategories } = useCategories();
 
   const resetForm = () => {
     setNombre('');
@@ -36,8 +34,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, productToEdit }
     setMarca('');
     setPreview(null);
     setMessage('');
-    setNewCategoryName('');
-    setNewSubcategoryName('');
     setSubcategoriasDisponibles([]);
   };
 
@@ -78,54 +74,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, productToEdit }
     }
   }, [allCategories, categoria, productToEdit]);
 
-
-  const handleAddNewCategory = async () => {
-    if (newCategoryName.trim() && !allCategories.some(cat => cat.title.toLowerCase() === newCategoryName.trim().toLowerCase())) {
-      try {
-        const newCat: Category = {
-            title: newCategoryName.trim(),
-            link: `/category?cat=${encodeURIComponent(newCategoryName.trim())}`,
-            subcategories: []
-        };
-        await addCategory(newCat);
-        
-        // Mejora UX: Seleccionar automáticamente la nueva categoría
-        setCategoria(newCategoryName.trim());
-        
-        setNewCategoryName('');
-        setMessage(`Categoría "${newCategoryName.trim()}" agregada.`);
-      } catch (error) {
-        setMessage('Error al agregar la categoría.');
-      }
-    } else {
-      setMessage('El nombre de la categoría es inválido o ya existe.');
-    }
-  };
-
-  const handleAddNewSubcategory = async () => {
-    const currentCategoryObj = allCategories.find(c => c.title === categoria);
-
-    if (newSubcategoryName.trim() && currentCategoryObj && currentCategoryObj.id) {
-      try {
-        const newSub: Subcategory = {
-           name: newSubcategoryName.trim(),
-           link: `/category?cat=${encodeURIComponent(categoria)}&sub=${encodeURIComponent(newSubcategoryName.trim())}`
-        };
-
-        await addSubcategory(currentCategoryObj.id, newSub);
-
-        // Mejora UX: Seleccionar automáticamente la nueva subcategoría
-        setSubcategoria(newSubcategoryName.trim());
-
-        setNewSubcategoryName('');
-        setMessage(`Subcategoría "${newSubcategoryName.trim()}" agregada a "${categoria}".`);
-      } catch (error) {
-         setMessage('Error al agregar subcategoría.');
-      }
-    } else {
-      setMessage('Nombre inválido o categoría no seleccionada.');
-    }
-  };
 
   const handleCategoriaChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const catTitle = e.target.value;
@@ -267,13 +215,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, productToEdit }
               <option key={cat.id || cat.title} value={cat.title}>{cat.title}</option>
             ))}
           </select>
-          
-          <div className="flex gap-2 mt-2">
-            <input type="text" placeholder="Nueva Categoría" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-gray-600 bg-gray-900 text-white" />
-            <button type="button" onClick={handleAddNewCategory}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md"> + </button>
-          </div>
         </div>
 
         {/* Subcategoría */}
@@ -287,13 +228,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onAddProduct, productToEdit }
                 <option key={sub} value={sub}>{sub}</option>
               ))}
             </select>
-
-            <div className="flex gap-2 mt-2">
-              <input type="text" placeholder="Nueva Subcategoría" value={newSubcategoryName} onChange={(e) => setNewSubcategoryName(e.target.value)}
-                className="w-full px-3 py-2 rounded-md border border-gray-600 bg-gray-900 text-white" />
-              <button type="button" onClick={handleAddNewSubcategory}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md"> + </button>
-            </div>
           </div>
         )}
 

@@ -17,7 +17,7 @@ public class OpenApiConfig {
                         .description("API RESTful para la gestión de usuarios, productos y carrito de compras en Level-UP.") // Descripción de la API
                         .version("3.5.2") // Versión de la API
                         .contact(new Contact()
-                                .name("Equipo de Persona") // Nombre de contacto
+                                .name("Equipo Persona") // Nombre de contacto
                                 .email("experson@duocuc.cl")) // Email de contacto
                         );
     }
